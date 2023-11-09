@@ -5,74 +5,72 @@ import tkinter.messagebox as mb
 import pickle
 import subprocess
 
-file_name = "dirs.pkl"
-current_dir = os.path.dirname(os.path.abspath(__file__))
-pickle_path = os.path.join(current_dir, file_name)
-def save(a,b,c):
+FileName = "dirs.pkl"
+CurrentDir = os.path.dirname(os.path.abspath(__file__))
+PicklePath = os.path.join(CurrentDir, FileName)
+def Save(a,b,c):
     dirs = {"source": a, "dest": b,"blend": c}
-    with open(pickle_path, "wb") as f:
+    with open(PicklePath, "wb") as f:
         pickle.dump(dirs, f)
     print(f"saved {a},{b},{c}")
 
-def compress():
-    source_dir = source_entry.get()
-    dest_dir = dest_entry.get()
-    blender_path = blender_entry.get() # get the blender path from the entry
-    if not os.path.isdir(source_dir):
+def Compress():
+    SourceDir = SourceEntry.get()
+    DestDir = DestEntry.get()
+    BlenderPath = BlenderEntry.get() # get the blender path from the entry
+    if not os.path.isdir(SourceDir):
         mb.showerror("Error", "Invalid source directory")
         return
-    if not os.path.isdir(dest_dir):
+    if not os.path.isdir(DestDir):
         mb.showerror("Error", "Invalid destination directory")
         return
-    if not os.path.isfile(blender_path): # check if the blender path is valid
+    if not os.path.isfile(BlenderPath): # check if the blender path is valid
         mb.showerror("Error", "Invalid blender path")
         return
-    script_path = os.path.join(current_dir, "BlenderHeadlessCompressor.py")
+    ScriptPath = os.path.join(CurrentDir, "BlenderHeadlessCompressor.py")
     try:
-        process = subprocess.Popen([blender_path, "--background", "--python", script_path]) # use the blender path instead of "blender"
+        process = subprocess.Popen([BlenderPath, "--background", "--python", ScriptPath]) # use the blender path instead of "blender"
         process.wait () 
-        return_code = process.returncode 
-        print (return_code) 
+        ReturnCode = process.returncode 
+        print (ReturnCode) 
     except Exception as e:
         mb.showerror("Error", str(e))
         return
-    source_size = round(sum(os.path.getsize(os.path.join(source_dir, f)) for f in os.listdir(source_dir) if os.path.isfile(os.path.join(source_dir, f)))/(1000*1000),1)
-    dest_size = round(sum(os.path.getsize(os.path.join(dest_dir, f)) for f in os.listdir(dest_dir) if os.path.isfile(os.path.join(dest_dir, f)))/(1000*1000),1)
-    mb.showinfo("Compression complete", f"{source_size} MB -> {dest_size} MB")
+    mb.showinfo("Compression complete", f"Check the console for data")
 
 root = tk.Tk()
 root.title("Batch blend file compressor") 
-source_label = tk.Label(root, text="Source directory:")
-source_label.grid(row=0, column=0, padx=5, pady=5)
-source_entry = tk.Entry(root, width=40)
-source_entry.grid(row=0, column=1, padx=5, pady=5)
-dest_label = tk.Label(root, text="Destination directory:")
-dest_label.grid(row=1, column=0, padx=5, pady=5)
-dest_entry = tk.Entry(root, width=40)
-dest_entry.grid(row=1, column=1, padx=5, pady=5)
-blender_label = tk.Label(root, text="Blender.exe path:") # add a label for the blender path
-blender_label.grid(row=2, column=0, padx=5, pady=5)
-blender_entry = tk.Entry(root, width=40) # add an entry for the blender path
-blender_entry.grid(row=2, column=1, padx=5, pady=5)
-browse_source_button = tk.Button(root, text="Browse", command=lambda: [source_entry.delete(0, tk.END), source_entry.insert(0, fd.askdirectory()),save(source_entry.get(),dest_entry.get(),blender_entry.get())]) 
-browse_source_button.grid(row=0, column=2, padx=5, pady=5)
-browse_dest_button = tk.Button(root, text="Browse", command=lambda: [dest_entry.delete(0, tk.END), dest_entry.insert(0, fd.askdirectory()),save(source_entry.get(),dest_entry.get(),blender_entry.get())]) 
-browse_dest_button.grid(row=1, column=2, padx=5, pady=5)
-browse_blender_button = tk.Button(root, text="Browse", command=lambda: [blender_entry.delete(0, tk.END), blender_entry.insert(0, fd.askopenfilename()),save(source_entry.get(),dest_entry.get(),blender_entry.get())]) # add a button to browse for the blender file
-browse_blender_button.grid(row=2, column=2, padx=5, pady=5)
-compress_button = tk.Button(root, text="Compress", command=compress) 
-compress_button.grid(row=3, column=1, padx=5, pady=5)
+SourceLabel = tk.Label(root, text="Source directory:")
+SourceLabel.grid(row=0, column=0, padx=5, pady=5)
+SourceEntry = tk.Entry(root, width=40)
+SourceEntry.grid(row=0, column=1, padx=5, pady=5)
+DestLabel = tk.Label(root, text="Destination directory:")
+DestLabel.grid(row=1, column=0, padx=5, pady=5)
+DestEntry = tk.Entry(root, width=40)
+DestEntry.grid(row=1, column=1, padx=5, pady=5)
+BlenderLabel = tk.Label(root, text="Blender.exe path:") # add a label for the blender path
+BlenderLabel.grid(row=2, column=0, padx=5, pady=5)
+BlenderEntry = tk.Entry(root, width=40) # add an entry for the blender path
+BlenderEntry.grid(row=2, column=1, padx=5, pady=5)
+BrowseSourceButton = tk.Button(root, text="Browse", command=lambda: [SourceEntry.delete(0, tk.END), SourceEntry.insert(0, fd.askdirectory()),Save(SourceEntry.get(),DestEntry.get(),BlenderEntry.get())]) 
+BrowseSourceButton.grid(row=0, column=2, padx=5, pady=5)
+BrowseDestButton = tk.Button(root, text="Browse", command=lambda: [DestEntry.delete(0, tk.END), DestEntry.insert(0, fd.askdirectory()),Save(SourceEntry.get(),DestEntry.get(),BlenderEntry.get())]) 
+BrowseDestButton.grid(row=1, column=2, padx=5, pady=5)
+BrowseBlenderButton = tk.Button(root, text="Browse", command=lambda: [BlenderEntry.delete(0, tk.END), BlenderEntry.insert(0, fd.askopenfilename()),Save(SourceEntry.get(),DestEntry.get(),BlenderEntry.get())]) # add a button to browse for the blender file
+BrowseBlenderButton.grid(row=2, column=2, padx=5, pady=5)
+CompressButton = tk.Button(root, text="Compress", command=Compress) 
+CompressButton.grid(row=3, column=1, padx=5, pady=5)
 try:
     
-    with open(pickle_path, "rb") as f:
+    with open(PicklePath, "rb") as f:
         dirs = pickle.load(f)
-    source_dir = dirs["source"]
-    dest_dir = dirs["dest"]
-    blend_dir = dirs["blend"]
+    SourceDir = dirs["source"]
+    DestDir = dirs["dest"]
+    BlendDir = dirs["blend"]
 
-    source_entry.insert(0, source_dir)
-    dest_entry.insert(0, dest_dir)
-    blender_entry.insert(0, blend_dir)
+    SourceEntry.insert(0, SourceDir)
+    DestEntry.insert(0, DestDir)
+    BlenderEntry.insert(0, BlendDir)
 except Exception as e:
     print(e)
 root.mainloop()
