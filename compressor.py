@@ -6,10 +6,11 @@ import pickle
 import subprocess
 
 file_name = "dirs.pkl"
-
+current_dir = os.path.dirname(os.path.abspath(__file__))
+pickle_path = os.path.join(current_dir, file_name)
 def save(a,b,c):
     dirs = {"source": a, "dest": b,"blend": c}
-    with open(file_name, "wb") as f:
+    with open(pickle_path, "wb") as f:
         pickle.dump(dirs, f)
     print(f"saved {a},{b},{c}")
 
@@ -26,8 +27,6 @@ def compress():
     if not os.path.isfile(blender_path): # check if the blender path is valid
         mb.showerror("Error", "Invalid blender path")
         return
-    save(source_entry.get(),dest_entry.get(),blender_entry.get())
-    current_dir = os.path.dirname(os.path.abspath(__file__))
     script_path = os.path.join(current_dir, "BlenderHeadlessCompressor.py")
     try:
         process = subprocess.Popen([blender_path, "--background", "--python", script_path]) # use the blender path instead of "blender"
@@ -39,7 +38,7 @@ def compress():
         return
     source_size = round(sum(os.path.getsize(os.path.join(source_dir, f)) for f in os.listdir(source_dir) if os.path.isfile(os.path.join(source_dir, f)))/(1000*1000),1)
     dest_size = round(sum(os.path.getsize(os.path.join(dest_dir, f)) for f in os.listdir(dest_dir) if os.path.isfile(os.path.join(dest_dir, f)))/(1000*1000),1)
-    mb.showinfo("Compression complete", f"{source_size} -> {dest_size} MB")
+    mb.showinfo("Compression complete", f"{source_size} MB -> {dest_size} MB")
 
 root = tk.Tk()
 root.title("Batch blend file compressor") 
@@ -64,11 +63,13 @@ browse_blender_button.grid(row=2, column=2, padx=5, pady=5)
 compress_button = tk.Button(root, text="Compress", command=compress) 
 compress_button.grid(row=3, column=1, padx=5, pady=5)
 try:
-    with open(file_name, "rb") as f:
+    
+    with open(pickle_path, "rb") as f:
         dirs = pickle.load(f)
     source_dir = dirs["source"]
     dest_dir = dirs["dest"]
     blend_dir = dirs["blend"]
+
     source_entry.insert(0, source_dir)
     dest_entry.insert(0, dest_dir)
     blender_entry.insert(0, blend_dir)
