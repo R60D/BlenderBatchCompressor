@@ -61,13 +61,11 @@ BrowseBlenderButton.grid(row=2, column=2, padx=5, pady=5)
 CompressButton = tk.Button(root, text="Compress", command=Compress) 
 CompressButton.grid(row=3, column=1, padx=5, pady=5)
 try:
-    
     with open(PicklePath, "rb") as f:
         dirs = pickle.load(f)
     SourceDir = dirs["source"]
     DestDir = dirs["dest"]
     BlendDir = dirs["blend"]
-
     SourceEntry.insert(0, SourceDir)
     DestEntry.insert(0, DestDir)
     BlenderEntry.insert(0, BlendDir)
