@@ -51,7 +51,7 @@ dest_label = tk.Label(root, text="Destination directory:")
 dest_label.grid(row=1, column=0, padx=5, pady=5)
 dest_entry = tk.Entry(root, width=40)
 dest_entry.grid(row=1, column=1, padx=5, pady=5)
-blender_label = tk.Label(root, text="Blender path:") # add a label for the blender path
+blender_label = tk.Label(root, text="Blender.exe path:") # add a label for the blender path
 blender_label.grid(row=2, column=0, padx=5, pady=5)
 blender_entry = tk.Entry(root, width=40) # add an entry for the blender path
 blender_entry.grid(row=2, column=1, padx=5, pady=5)
