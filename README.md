@@ -9,5 +9,5 @@ This python script runs blender in headless mode and uses blenders internal .ble
 
 ## Images
 
-![Simple UI!](/Images/UI.jpg)
-![Huge Savings!](/Images/Compressor.jpg)
+![Simple UI!](./Images/UI.jpg)
+![Huge Savings!](./Images/Compressor.jpg)
